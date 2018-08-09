@@ -6,9 +6,10 @@ import (
 )
 
 func TestLru_Add_Get(t *testing.T) {
-	var e1, e2 interface{}
+	var e1, e2, e3 interface{}
 	e1 = "a"
 	e2 = "b"
+	e3 = "c"
 
 	l := NewLru(1)
 	l.Add("a", e1)
@@ -23,6 +24,11 @@ func TestLru_Add_Get(t *testing.T) {
 
 	_, ok = l.Get("a")
 	assert.False(t, ok)
+
+	l.Add("b", e3)
+	v, ok = l.Get("b")
+	assert.True(t, ok)
+	assert.Equal(t, e3, v)
 }
 
 func TestLru_Len(t *testing.T) {

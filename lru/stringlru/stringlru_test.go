@@ -11,7 +11,7 @@ import (
 )
 
 func TestLru_Add_Get(t *testing.T) {
-	var e1, e2 string
+	var e1, e2, e3 string
 	e := createRandomObject(e1)
 	if v, ok := e.(string); ok {
 		e1 = v
@@ -19,6 +19,10 @@ func TestLru_Add_Get(t *testing.T) {
 	e = createRandomObject(e2)
 	if v, ok := e.(string); ok {
 		e2 = v
+	}
+	e = createRandomObject(e3)
+	if v, ok := e.(string); ok {
+		e3 = v
 	}
 
 	l := NewLru(1)
@@ -34,6 +38,11 @@ func TestLru_Add_Get(t *testing.T) {
 
 	_, ok = l.Get("a")
 	assert.False(t, ok)
+
+	l.Add("b", e3)
+	v, ok = l.Get("b")
+	assert.True(t, ok)
+	assert.Equal(t, e3, *v)
 }
 
 func TestLru_Len(t *testing.T) {
