@@ -9,12 +9,14 @@ type entry struct {
 	value interface{}
 }
 
+// Lru is lru cache struct.
 type Lru struct {
 	ll    *list.List
 	store map[interface{}]*list.Element
 	size  int
 }
 
+// NewLru create and init lru instance.
 func NewLru(size int) *Lru {
 	return &Lru{
 		ll:    list.New(),
@@ -23,6 +25,7 @@ func NewLru(size int) *Lru {
 	}
 }
 
+// Add add a key value to cache.
 func (l *Lru) Add(key interface{}, v interface{}) {
 	// update if already exists
 	if ent, exists := l.store[key]; exists {
@@ -40,12 +43,14 @@ func (l *Lru) Add(key interface{}, v interface{}) {
 	}
 }
 
+// Remove remove a key from cache.
 func (l *Lru) removeElement(ele *list.Element) {
 	l.ll.Remove(ele)
 	k := ele.Value.(*entry).key
 	delete(l.store, k)
 }
 
+// Get get cache by key.
 func (l *Lru) RemoveOldest() {
 	ele := l.ll.Back()
 	if ele != nil {
@@ -53,12 +58,14 @@ func (l *Lru) RemoveOldest() {
 	}
 }
 
+// Len return cache size.
 func (l *Lru) Remove(k interface{}) {
 	if ele, exists := l.store[k]; exists {
 		l.removeElement(ele)
 	}
 }
 
+// Clear flush the cache.
 func (l *Lru) Get(k interface{}) (interface{}, bool) {
 	if ele, exists := l.store[k]; exists {
 		l.ll.MoveToFront(ele)
