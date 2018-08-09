@@ -16,7 +16,7 @@ jobs:
             vgo mod vendor
       - run:
           name: test
-          command: vgo test ./... -coverprofile=coverage.txt -covermode=atomic
+          command: go test ./... -coverprofile=coverage.txt -covermode=atomic
       - run:
           name: codecov
           command: bash <(curl -s https://codecov.io/bash)
