@@ -49,6 +49,7 @@ func (l *Lru) removeElement(ele *list.Element) {
 	delete(l.store, k)
 }
 
+// RemoveOldest remove the oldest key.
 func (l *Lru) RemoveOldest() {
 	ele := l.ll.Back()
 	if ele != nil {

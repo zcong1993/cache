@@ -43,14 +43,13 @@ func (l *Lru) Add(key interface{}, v interface{}) {
 	}
 }
 
-// Remove remove a key from cache.
 func (l *Lru) removeElement(ele *list.Element) {
 	l.ll.Remove(ele)
 	k := ele.Value.(*entry).key
 	delete(l.store, k)
 }
 
-// Get get cache by key.
+// RemoveOldest remove the oldest key.
 func (l *Lru) RemoveOldest() {
 	ele := l.ll.Back()
 	if ele != nil {
@@ -58,14 +57,14 @@ func (l *Lru) RemoveOldest() {
 	}
 }
 
-// Len return cache size.
+// Remove remove a key from cache.
 func (l *Lru) Remove(k interface{}) {
 	if ele, exists := l.store[k]; exists {
 		l.removeElement(ele)
 	}
 }
 
-// Clear flush the cache.
+// Get get cache by key.
 func (l *Lru) Get(k interface{}) (interface{}, bool) {
 	if ele, exists := l.store[k]; exists {
 		l.ll.MoveToFront(ele)
@@ -74,10 +73,12 @@ func (l *Lru) Get(k interface{}) (interface{}, bool) {
 	return nil, false
 }
 
+// Len return cache size.
 func (l *Lru) Len() int {
 	return l.ll.Len()
 }
 
+// Clear flush the cache.
 func (l *Lru) Clear() {
 	ll := NewLru(l.size)
 	l.store = ll.store
