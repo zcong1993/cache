@@ -100,11 +100,12 @@ func TestExipreMapGc(t *testing.T) {
 	assert.Equal(t, 2, em.Size())
 
 	// test gc busy
-	em.inGc = true
-	em.Set(key1, e1, d)
-	em.Set(key2, e2, d)
-	time.Sleep(gcInterval)
-	assert.Equal(t, 2, em.Size())
+	em2 := NewExpireMap(time.Millisecond * 200)
+	em2.Set(key1, e1, d)
+	em2.Set(key2, e2, d)
+	em2.inGc = true
+	time.Sleep(time.Millisecond * 200)
+	assert.Equal(t, 2, em2.Size())
 }
 
 func createRandomObject(i interface{}) interface{} {
