@@ -2,6 +2,17 @@
 
 > cache for go
 
+## Libs
+
+- [expire](./expire) golang map with redis `expire` method, but in memory.
+- [lru](./lru) simple lru cache in memory.
+
+## Dev
+
+- install [go_generics](https://github.com/mmatczuk/go_generics), `go get -u github.com/mmatczuk/go_generics/cmd/go_generics`
+- do something
+- `make generate`
+
 ## License
 
 MIT &copy; zcong1993
