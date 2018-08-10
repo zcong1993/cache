@@ -102,7 +102,7 @@ func TestExipreMapGc(t *testing.T) {
 	em2.Set(key1, e1, d)
 	em2.Set(key2, e2, d)
 	em2.inGc = true
-	time.Sleep(time.Millisecond * 200)
+	time.Sleep(time.Millisecond * 200 * 2)
 	assert.Equal(t, 2, em2.Size())
 }
 

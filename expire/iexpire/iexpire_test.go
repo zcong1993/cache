@@ -1,35 +1,19 @@
-package expire
+package iexpire
 
 import (
-	"fmt"
 	"github.com/stretchr/testify/assert"
-	"math/rand"
-	"reflect"
 	"testing"
-	"testing/quick"
 	"time"
 )
-
-type P = Template
 
 func TestExipreMapCommon(t *testing.T) {
 	key1 := "key1"
 	key2 := "key2"
 	key3 := "key3"
 
-	var e1, e2, e3 P
-	e := createRandomObject(e1)
-	if v, ok := e.(P); ok {
-		e1 = v
-	}
-	e = createRandomObject(e2)
-	if v, ok := e.(P); ok {
-		e2 = v
-	}
-	e = createRandomObject(e3)
-	if v, ok := e.(P); ok {
-		e3 = v
-	}
+	e1 := "value1"
+	e2 := "value2"
+	e3 := "value3"
 
 	d := time.Millisecond * 100
 
@@ -37,14 +21,14 @@ func TestExipreMapCommon(t *testing.T) {
 
 	em.Set(key1, e1, d)
 	em.SetExpiredIn(key2, e2, time.Now().Add(d))
-	assert.Equal(t, e1, *em.Get(key1))
+	assert.Equal(t, e1, em.Get(key1))
 	assert.True(t, em.Has(key1))
-	assert.Equal(t, e2, *em.Get(key2))
+	assert.Equal(t, e2, em.Get(key2))
 	assert.True(t, em.Has(key2))
 	assert.Equal(t, 2, em.Size())
 
 	em.Update(key1, e3)
-	assert.Equal(t, e3, *em.Get(key1), "update should work")
+	assert.Equal(t, e3, em.Get(key1), "update should work")
 
 	time.Sleep(d)
 	assert.False(t, em.Has(key1))
@@ -62,15 +46,8 @@ func TestExipreMapGc(t *testing.T) {
 	key1 := "key1"
 	key2 := "key2"
 
-	var e1, e2 P
-	e := createRandomObject(e1)
-	if v, ok := e.(P); ok {
-		e1 = v
-	}
-	e = createRandomObject(e2)
-	if v, ok := e.(P); ok {
-		e2 = v
-	}
+	e1 := "value1"
+	e2 := "value2"
 
 	d := time.Millisecond * 200
 	gcInterval := time.Millisecond * 500
@@ -106,12 +83,4 @@ func TestExipreMapGc(t *testing.T) {
 	em2.inGc = true
 	time.Sleep(time.Millisecond * 200 * 2)
 	assert.Equal(t, 2, em2.Size())
-}
-
-func createRandomObject(i interface{}) interface{} {
-	v, ok := quick.Value(reflect.TypeOf(i), rand.New(rand.NewSource(time.Now().UnixNano())))
-	if !ok {
-		panic(fmt.Sprintf("unsupported type %v", i))
-	}
-	return v.Interface()
 }

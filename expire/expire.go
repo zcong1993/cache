@@ -2,6 +2,7 @@ package expire
 
 import (
 	"github.com/zcong1993/cache/expire/bytesexpire"
+	"github.com/zcong1993/cache/expire/iexpire"
 	"github.com/zcong1993/cache/expire/stringexpire"
 	"time"
 )
@@ -22,4 +23,9 @@ func NewBytesExpireMap(gcInterval time.Duration) *bytesexpire.ExipreMap {
 // NewStringExpireMap return a string expire map instance
 func NewStringExpireMap(gcInterval time.Duration) *stringexpire.ExipreMap {
 	return stringexpire.NewExpireMap(gcInterval)
+}
+
+// NewExpireMap return a expire map with interface{} value type
+func NewExpireMap(gcInterval time.Duration) *iexpire.ExipreMap {
+	return iexpire.NewExpireMap(gcInterval)
 }
