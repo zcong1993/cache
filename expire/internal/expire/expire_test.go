@@ -54,6 +54,7 @@ func TestExipreMapCommon(t *testing.T) {
 	assert.Equal(t, 0, em.Size())
 
 	// update un exists key
+	assert.Nil(t, em.Get(key3))
 	assert.Equal(t, NO_KEY_TO_UPDATE, em.Update(key3, e3))
 }
 
@@ -90,6 +91,20 @@ func TestExipreMapGc(t *testing.T) {
 	em.Set(key2, e2, d)
 	time.Sleep(gcInterval)
 	assert.Equal(t, 0, em.Size())
+
+	// test clean up stop gc
+	em.CleanUp()
+	em.Set(key1, e1, d)
+	em.Set(key2, e2, d)
+	time.Sleep(gcInterval)
+	assert.Equal(t, 2, em.Size())
+
+	// test gc busy
+	em.inGc = true
+	em.Set(key1, e1, d)
+	em.Set(key2, e2, d)
+	time.Sleep(gcInterval)
+	assert.Equal(t, 2, em.Size())
 }
 
 func createRandomObject(i interface{}) interface{} {
